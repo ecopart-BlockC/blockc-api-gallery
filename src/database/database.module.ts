@@ -20,10 +20,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         extra: {
           options: {
             applicationName: configService.get<string>("DB_APP_NAME"),
+            encrypt: true,
+            trustServerCertificate: true,
           },
-        },
-        options: {
-          encrypt: true,
         },
       }),
     }),
