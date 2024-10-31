@@ -14,12 +14,12 @@ export class TokenService {
     return await this.usuarioRepository.find();
   }
 
-  async validateToken(tokenHash: string): Promise<boolean> {
+  async validateToken(tokenHash: string): Promise<void> {
     const foundToken = (await this.findAll()).filter((token) => {
       if (token.Token === tokenHash) return token;
     });
 
-    if (!foundToken) {
+    if (foundToken.length === 0) {
       throw new Error("token not found");
     }
 
@@ -29,8 +29,6 @@ export class TokenService {
     ) {
       throw new Error("invalid token");
     }
-
-    return true;
   }
 
   findOne(id: number) {
