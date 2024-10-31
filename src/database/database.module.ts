@@ -1,6 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Token } from "src/token/entities/token.entity";
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
         username: configService.get<string>("DB_USER"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_DATABASE"),
+        entities: [Usuario, Token],
+        synchronize: false,
         extra: {
           options: {
             applicationName: configService.get<string>("DB_APP_NAME"),

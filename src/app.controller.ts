@@ -1,12 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get } from "@nestjs/common";
+import { AppService } from "./app.service";
+import { TokenService } from "./token/token.service";
+import { Token } from "./token/entities/token.entity";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly tokenService: TokenService
+  ) {}
 
   @Get()
-  get(): string {
-    return this.appService.get();
+  async getUsuarios(): Promise<Token[]> {
+    return await this.tokenService.findAll();
   }
 }
