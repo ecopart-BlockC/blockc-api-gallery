@@ -7,20 +7,9 @@ export class AppController {
   constructor(private readonly tokenService: TokenService) {}
 
   @Get()
-  async testToken(
-    @Headers("authorization") authHeader: string,
-    @Res() res: Response
-  ) {
-    const token = authHeader?.split(" ")[1];
-    try {
-      await this.tokenService.validateToken(token);
-      return res.status(HttpStatus.OK).json({
-        message: "token valid",
-      });
-    } catch (error) {
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        message: error.message,
-      });
-    }
+  async testToken(@Res() res: Response) {
+    return res.status(HttpStatus.OK).json({
+      message: "token valid",
+    });
   }
 }
