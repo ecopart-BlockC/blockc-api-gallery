@@ -12,23 +12,11 @@ export class UsuarioService {
     private readonly usuarioRepository: Repository<Usuario>
   ) {}
 
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return "This action adds a new usuario";
-  }
-
   async findAll(): Promise<Usuario[]> {
     return await this.usuarioRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
-  }
-
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async findOne(id: number) {
+    return await this.usuarioRepository.findOne({ where: { ID: id } });
   }
 }

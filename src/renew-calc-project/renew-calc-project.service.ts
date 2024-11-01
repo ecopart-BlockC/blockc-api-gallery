@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { CreateRenewCalcProjectDto } from "./dto/create-renew-calc-project.dto";
 import { UpdateRenewCalcProjectDto } from "./dto/update-renew-calc-project.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { RenewCalcProject } from "./entities/renew-calc-project.entity";
@@ -11,9 +10,6 @@ export class RenewCalcProjectService {
     @InjectRepository(RenewCalcProject)
     private readonly renewCalcProjectRepository: Repository<RenewCalcProject>
   ) {}
-  create(createRenewCalcProjectDto: CreateRenewCalcProjectDto) {
-    return "This action adds a new renewCalcProject";
-  }
 
   findAll() {
     return this.renewCalcProjectRepository.find();
@@ -44,9 +40,5 @@ export class RenewCalcProjectService {
       id,
       updateRenewCalcProjectDto
     );
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} renewCalcProject`;
   }
 }

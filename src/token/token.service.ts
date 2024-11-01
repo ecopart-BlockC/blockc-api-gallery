@@ -30,12 +30,4 @@ export class TokenService {
       throw new Error("invalid token");
     }
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} token`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} token`;
-  }
 }
