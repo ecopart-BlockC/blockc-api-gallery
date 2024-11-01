@@ -11,6 +11,7 @@ import { Repository } from "typeorm";
 import { ErrorService } from "src/error/error.service";
 import { UsuarioService } from "src/usuario/usuario.service";
 import { RenewCalcProjectService } from "src/renew-calc-project/renew-calc-project.service";
+import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
 
 @Injectable()
 export class TransferProjectService {
@@ -25,32 +26,12 @@ export class TransferProjectService {
     const projectGo = await this.renewCalcProjectService.findOne(
       createTransferProjectDto.projectGoId
     );
-    if (!projectGo)
-      throw new NotFoundException("invalid operation: not found projectGo");
 
-    if (projectGo.Status === "Transferido")
-      throw new BadRequestException(
-        "invalid operation: this projectGo already transferred"
-      );
-
-    if (projectGo.Status !== "Auditado")
-      throw new BadRequestException(
-        "invalid operation: the projectGo must be audited"
-      );
-
-    this.renewCalcProjectService.update(createTransferProjectDto.projectGoId, {
-      Status: "Transferido",
-    });
-
-    if (
-      !(await this.renewCalcProjectService.checkProjectOwnership(
-        createTransferProjectDto.companyID,
-        createTransferProjectDto.projectGoId
-      ))
-    )
-      throw new ForbiddenException(
-        "invalid operation: a company can only transfer a project that has been issued by it"
-      );
+    await this.validateTransfer(
+      projectGo,
+      createTransferProjectDto.projectGoId,
+      createTransferProjectDto.companyID
+    );
 
     try {
       const project = this.transferProjectRepository.create({
@@ -65,6 +46,13 @@ export class TransferProjectService {
           .slice(0, -1),
       });
 
+      this.renewCalcProjectService.update(
+        createTransferProjectDto.projectGoId,
+        {
+          Status: "Transferido",
+        }
+      );
+
       return await this.transferProjectRepository.save(project);
     } catch (error) {
       this.errorService.create({
@@ -77,6 +65,34 @@ export class TransferProjectService {
       });
       throw new Error(error.message);
     }
+  }
+
+  async validateTransfer(
+    projectGo: RenewCalcProject,
+    projectGoId: number,
+    companyId: number
+  ) {
+    if (!projectGo)
+      throw new NotFoundException("invalid operation: not found projectGo");
+
+    if (projectGo.Status === "Transferido")
+      throw new BadRequestException(
+        "invalid operation: this projectGo already transferred"
+      );
+
+    if (projectGo.Status !== "Auditado")
+      throw new BadRequestException(
+        "invalid operation: the projectGo must be audited"
+      );
+    if (
+      !(await this.renewCalcProjectService.checkProjectOwnership(
+        companyId,
+        projectGoId
+      ))
+    )
+      throw new ForbiddenException(
+        "invalid operation: a company can only transfer a project that has been issued by it"
+      );
   }
 
   async findAll() {
