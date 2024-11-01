@@ -7,6 +7,8 @@ import { UsuarioModule } from "./usuario/usuario.module";
 import { TokenModule } from "./token/token.module";
 import { TransferProjectModule } from "./transfer-project/transfer-project.module";
 import { AuthMiddleware } from "./auth/auth.middleware";
+import { ErrorModule } from './error/error.module';
+import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { AuthMiddleware } from "./auth/auth.middleware";
     UsuarioModule,
     TokenModule,
     TransferProjectModule,
+    ErrorModule,
+    RenewCalcProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],
