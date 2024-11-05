@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 @Entity('tbl_campanha')
 export class CampanhaEntity {
+  
   @PrimaryGeneratedColumn({ name: 'ID' })
   id: number;
 

@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { CampanhaService } from './campaign.service';
-import { CampanhaController } from './campaign.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CampanhaEntity } from './entities/campanha.entity';
+import { CampanhaEmpresaRepository } from './campanha-empresa.repository';
 import { CampanhaEmpresaEntity } from './entities/campanha-empresa.entity';
 
 @Module({
-  controllers: [CampanhaController],
-  providers: [CampanhaService],
-  imports: [
-    TypeOrmModule.forFeature([CampanhaEntity,CampanhaEmpresaEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([CampanhaEmpresaEntity])],
+  providers: [CampanhaService, CampanhaEmpresaRepository],
+  exports: [CampanhaEmpresaRepository, CampanhaService],
 })
 export class CampaignModule {}
+
+
+

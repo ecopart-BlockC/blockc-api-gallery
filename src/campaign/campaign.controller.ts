@@ -1,11 +1,11 @@
 import { Controller, Get,} from '@nestjs/common';
 import { CampanhaService } from './campaign.service';
 
-@Controller('campaign')
+@Controller('campanhas')
 export class CampanhaController {
   constructor(private readonly campanhaService: CampanhaService) {}
 
-  @Get('campaign')
+  @Get()
   findAll() {
     return this.campanhaService.listarCampanhasPorEmpresa();
   }

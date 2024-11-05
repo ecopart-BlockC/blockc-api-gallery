@@ -10,7 +10,7 @@ export class CampanhaEmpresaRepository extends Repository<CampanhaEmpresaEntity>
     super(CampanhaEmpresaEntity, dataSource.createEntityManager());
   }
 
-  async findCampaignWithCompany() {
+  async findCampaignWithCompany(): Promise<CampanhaEmpresaEntity[]> {
     const query = `
       SELECT
         C.ID,
@@ -29,7 +29,6 @@ export class CampanhaEmpresaRepository extends Repository<CampanhaEmpresaEntity>
       FULL JOIN tbl_campanha_empresa AS E
       ON C.ID = E.CampanhaID
     `;
-    return await this.dataSource.query(query);
+    return await  this.dataSource.query(query);
   }
 }
-
