@@ -1,20 +1,20 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 
 @Entity('tbl_campanha_projeto')
-export class CampanhaProjeto {
-  @PrimaryColumn({ name: 'CampanhaID' })
+export class CampanhaProjetoEntity {
+  @PrimaryGeneratedColumn({ name: 'CampanhaID' })
   campanhaId: number;
 
-  @PrimaryColumn({ name: 'ProjetoID' })
+  @PrimaryGeneratedColumn({ name: 'ProjetoID' })
   projetoId: number;
 
   @Column({ name: 'Ativo', type: 'bit' })
   ativo: boolean;
 
-  @CreateDateColumn({ name: 'CriadoEm', type: 'datetime' })
+  @Column({ name: 'CriadoEm', type: 'datetime' })
   criadoEm: Date;
 
-  @Column({ name: 'CriadoPor', type: 'int' })
+  @CreateDateColumn({ name: 'CriadoPor', type: 'int' })
   criadoPor: number;
 
   @UpdateDateColumn({ name: 'ModificadoEm', type: 'datetime', nullable: true })

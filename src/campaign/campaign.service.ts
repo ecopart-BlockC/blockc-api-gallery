@@ -1,26 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCampaignDto } from './dto/create-campaign.dto';
-import { UpdateCampaignDto } from './dto/update-campaign.dto';
-
+import { CampanhaEntity } from './entities/campanha.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CampanhaEmpresaRepository } from './campanha-empresa.repository';
 @Injectable()
-export class CampaignService {
-  create(createCampaignDto: CreateCampaignDto) {
-    return 'This action adds a new campaign';
-  }
+export class CampanhaService {
 
-  findAll() {
-    return `This action returns all campaign`;
-  }
+  constructor(
+    @InjectRepository(CampanhaEntity)
+    private readonly campanhaEmpresaRepository: CampanhaEmpresaRepository){}
 
-  findOne(id: number) {
-    return `This action returns a #${id} campaign`;
-  }
-
-  update(id: number, updateCampaignDto: UpdateCampaignDto) {
-    return `This action updates a #${id} campaign`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} campaign`;
+  async listarCampanhasPorEmpresa() {
+      const campaigns = await this.campanhaEmpresaRepository.findCampaignWithCompany();
+      return campaigns;
   }
 }

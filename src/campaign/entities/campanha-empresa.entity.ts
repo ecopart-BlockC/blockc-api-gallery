@@ -1,11 +1,11 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
 
 @Entity('tbl_campanha_empresa')
-export class CampanhaEmpresa {
-  @PrimaryColumn({ name: 'CampanhaID' })
+export class CampanhaEmpresaEntity {
+  @PrimaryGeneratedColumn({ name: 'CampanhaID' })
   campanhaId: number;
 
-  @PrimaryColumn({ name: 'EmpresaID' })
+  @PrimaryGeneratedColumn({ name: 'EmpresaID' })
   empresaId: number;
 
   @Column({ name: 'Ativo', type: 'bit' })

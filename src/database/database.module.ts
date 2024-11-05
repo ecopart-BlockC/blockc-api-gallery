@@ -6,6 +6,10 @@ import { Token } from "src/token/entities/token.entity";
 import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
 import { Error } from "src/error/entities/error.entity";
 import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { CampanhaEntity } from "src/campaign/entities/campanha.entity";
+import { CampanhaProjetoEntity } from "src/campaign/entities/campanha-projeto.entity";
+import { CampanhaEmpresaEntity } from "src/campaign/entities/campanha-empresa.entity";
+import { EmpresaUsuarioEntity } from "src/campaign/entities/empresa-usuario.entity";
 
 @Module({
   imports: [
@@ -22,7 +26,7 @@ import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-pro
         username: configService.get<string>("DB_USER"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_DATABASE"),
-        entities: [Usuario, Token, TransferProject, Error, RenewCalcProject],
+        entities: [Usuario, Token, TransferProject, Error, RenewCalcProject, CampanhaEntity, CampanhaProjetoEntity, CampanhaEmpresaEntity,EmpresaUsuarioEntity],
         synchronize: false,
         extra: {
           options: {
