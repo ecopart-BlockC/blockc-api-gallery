@@ -6,8 +6,8 @@ export class CampanhaController {
   constructor(private readonly campanhaService: CampanhaService) {}
 
   @Get()
-  findAll() {
-    return this.campanhaService.listarCampanhasPorEmpresa();
+  async listarCampanhasPorEmpresa() {
+    return await this.campanhaService.listarCampanhasPorEmpresa();
   }
 
 }
