@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsPositive } from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber, IsPositive } from "class-validator";
 
 export class CreateTransferProjectDto {
   @IsInt()
@@ -10,6 +10,11 @@ export class CreateTransferProjectDto {
   @IsPositive()
   @IsNotEmpty()
   destinationCompanyId: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  quantity: number;
 
   @IsInt()
   @IsPositive()

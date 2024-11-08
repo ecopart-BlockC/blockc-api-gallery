@@ -11,8 +11,17 @@ export class RenewCalcProjectService {
     private readonly renewCalcProjectRepository: Repository<RenewCalcProject>
   ) {}
 
-  findAll() {
-    return this.renewCalcProjectRepository.find();
+  async findAll() {
+    return (await this.renewCalcProjectRepository.find()).map((project) => {
+      return {
+        type: "GOGAS",
+        projectId: project.ID,
+        status: project.Status,
+        unit: "m3",
+        initialVolume: Number(project.VolumeEmission),
+        balance: Number(project.Saldo),
+      };
+    });
   }
 
   findOne(id: number) {

@@ -1,6 +1,8 @@
 import {
   BadRequestException,
   ForbiddenException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -9,9 +11,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { TransferProject } from "./entities/transfer-project.entity";
 import { Repository } from "typeorm";
 import { ErrorService } from "src/error/error.service";
-import { UsuarioService } from "src/usuario/usuario.service";
 import { RenewCalcProjectService } from "src/renew-calc-project/renew-calc-project.service";
 import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { Usuario } from "src/usuario/entities/usuario.entity";
 
 @Injectable()
 export class TransferProjectService {
@@ -19,7 +21,7 @@ export class TransferProjectService {
     @InjectRepository(TransferProject)
     private readonly transferProjectRepository: Repository<TransferProject>,
     private readonly errorService: ErrorService,
-    private readonly userService: UsuarioService,
+    @Inject(forwardRef(() => RenewCalcProjectService))
     private readonly renewCalcProjectService: RenewCalcProjectService
   ) {}
   async create(createTransferProjectDto: CreateTransferProjectDto) {
@@ -30,28 +32,34 @@ export class TransferProjectService {
     await this.validateTransfer(
       projectGo,
       createTransferProjectDto.projectGoId,
-      createTransferProjectDto.companyID
+      createTransferProjectDto.companyID,
+      createTransferProjectDto.quantity
     );
+
+    this.renewCalcProjectService.update(createTransferProjectDto.projectGoId, {
+      Saldo: projectGo.Saldo
+        ? Number(projectGo.Saldo) - createTransferProjectDto.quantity
+        : Number(projectGo.VolumeEmission) - createTransferProjectDto.quantity,
+    });
+
+    const user = new Usuario();
+
+    user.ID = createTransferProjectDto.userId;
 
     try {
       const project = this.transferProjectRepository.create({
-        CriadoPor: createTransferProjectDto.userId,
+        CriadoPor: user,
         EmpresaEnviadoraID: createTransferProjectDto.companyID,
         EmpresaRecebedoraID: createTransferProjectDto.destinationCompanyId,
         ProjetoGoID: createTransferProjectDto.projectGoId,
+        Quantidade: createTransferProjectDto.quantity,
+        Saldo: createTransferProjectDto.quantity,
         CriadoEm: new Date()
           .toISOString()
           .replace("T", " ")
           .replace("Z", "")
           .slice(0, -1),
       });
-
-      this.renewCalcProjectService.update(
-        createTransferProjectDto.projectGoId,
-        {
-          Status: "Transferido",
-        }
-      );
 
       return await this.transferProjectRepository.save(project);
     } catch (error) {
@@ -70,15 +78,15 @@ export class TransferProjectService {
   async validateTransfer(
     projectGo: RenewCalcProject,
     projectGoId: number,
-    companyId: number
+    companyId: number,
+    quantity: number
   ) {
+    if (quantity > projectGo.Saldo)
+      throw new NotFoundException(
+        "invalid operation: the project balance is less than the requested quantity"
+      );
     if (!projectGo)
       throw new NotFoundException("invalid operation: not found projectGo");
-
-    if (projectGo.Status === "Transferido")
-      throw new BadRequestException(
-        "invalid operation: this projectGo already transferred"
-      );
 
     if (projectGo.Status !== "Auditado")
       throw new BadRequestException(
@@ -96,25 +104,32 @@ export class TransferProjectService {
   }
 
   async findAll() {
-    const [users, projects] = await Promise.all([
-      this.userService.findAll(),
-      this.transferProjectRepository.find(),
-    ]);
-
-    const userMap = new Map(users.map((user) => [user.ID, user]));
-
-    return projects.map((project) => {
-      const createdByUser = userMap.get(project.CriadoPor);
-
+    return (
+      await this.transferProjectRepository.find({
+        relations: {
+          CriadoPor: true,
+        },
+        select: {
+          CriadoPor: {
+            Nome: true,
+            Sobrenome: true,
+            Email: true,
+          },
+        },
+      })
+    ).map((transference) => {
       return {
-        id: Number(project.ID),
-        destinationCompanyId: Number(project.EmpresaRecebedoraID),
-        issuedCompanyId: Number(project.EmpresaEnviadoraID),
-        projectGoId: Number(project.ProjetoGoID),
-        createdAt: project.CriadoEm,
-        createdBy: createdByUser
-          ? `${createdByUser.Nome} ${createdByUser.Sobrenome}`
-          : null,
+        id: Number(transference.ID),
+        destinationCompanyId: Number(transference.EmpresaRecebedoraID),
+        issuedCompanyId: Number(transference.EmpresaEnviadoraID),
+        projectGoId: Number(transference.ProjetoGoID),
+        quantity: Number(transference.Quantidade),
+        balance: Number(transference.Saldo),
+        createdBy: {
+          name: transference.CriadoPor.Nome,
+          lastName: transference.CriadoPor.Sobrenome,
+          email: transference.CriadoPor.Email,
+        },
       };
     });
   }
