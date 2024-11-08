@@ -15,8 +15,14 @@ export class RouteInventoryService {
   ) {}
 
   // qualquer usuario pode ver todos os inventarios de rotas?
-  findAll() {
+  findAll(param?: { companyId?: number; userId?: number }) {
+    console.log(param);
+
     return this.routeInventoryRepository.find({
+      where: {
+        CompanyId: param.companyId,
+        CriadoPor: param.userId ? { ID: param.userId } : undefined,
+      },
       relations: ["CriadoPor", "ModificadoPor", "Country"],
     });
   }

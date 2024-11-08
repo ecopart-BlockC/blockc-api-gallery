@@ -22,7 +22,7 @@ export class RouteInventory {
   @Column({ type: "varchar", name: "Nome", length: 255, nullable: false })
   Nome: string;
 
-  @Transform(({ value }) => value.Nome)
+  //@Transform(({ value }) => value.Nome) // Nao funciona pois precisa mapear o objeto (causa ausencia do dado no response)
   @Column({ type: "bigint", name: "CompanyId", nullable: false })
   CompanyId: number;
 
