@@ -1,14 +1,16 @@
 import { MiddlewareConsumer, Module } from "@nestjs/common";
+
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { DatabaseModule } from "./database/database.module";
+import { AuthMiddleware } from "./auth/auth.middleware";
 import { ConfigModule } from "@nestjs/config";
-import { UsuarioModule } from "./usuario/usuario.module";
+import { DatabaseModule } from "./database/database.module";
+import { ErrorModule } from "./error/error.module";
+import { RenewCalcProjectModule } from "./renew-calc-project/renew-calc-project.module";
+import { RouteInventoryModule } from "./route-inventory/route-inventory.module";
 import { TokenModule } from "./token/token.module";
 import { TransferProjectModule } from "./transfer-project/transfer-project.module";
-import { AuthMiddleware } from "./auth/auth.middleware";
-import { ErrorModule } from './error/error.module';
-import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
+import { UsuarioModule } from "./usuario/usuario.module";
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.
     TransferProjectModule,
     ErrorModule,
     RenewCalcProjectModule,
+    RouteInventoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
