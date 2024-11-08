@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
 
 @Entity('tbl_campanha')
-export class CampanhaEntity {
-  
+export class CampaignEntity {
+
   @PrimaryGeneratedColumn({ name: 'ID' })
   id: number;
 

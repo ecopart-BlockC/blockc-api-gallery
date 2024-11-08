@@ -1,13 +1,13 @@
 import { Controller, Get,} from '@nestjs/common';
-import { CampanhaService } from './campaign.service';
+import { CampaignService } from './campaign.service';
 
-@Controller('campanhas')
-export class CampanhaController {
-  constructor(private readonly campanhaService: CampanhaService) {}
+@Controller('campaign')
+export class CampaignController {
+  constructor(private readonly campaignService: CampaignService) {}
 
   @Get()
-  async listarCampanhasPorEmpresa() {
-    return await this.campanhaService.listarCampanhasPorEmpresa();
+  async findAllCampaignWithCompany() {
+    return await this.campaignService.findCampaignWithCompany();
   }
 
 }
