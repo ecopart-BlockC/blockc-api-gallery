@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { TransferProjectService } from "./transfer-project.service";
 import { TransferProjectController } from "./transfer-project.controller";
 import { TransferProject } from "./entities/transfer-project.entity";
@@ -14,7 +14,8 @@ import { RenewCalcProjectModule } from "src/renew-calc-project/renew-calc-projec
     TypeOrmModule.forFeature([TransferProject]),
     ErrorModule,
     UsuarioModule,
-    RenewCalcProjectModule,
+    forwardRef(() => RenewCalcProjectModule), // Usando forwardRef aqui
   ],
+  exports: [TransferProjectService],
 })
 export class TransferProjectModule {}
