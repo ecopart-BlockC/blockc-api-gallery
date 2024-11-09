@@ -9,7 +9,7 @@ import { TransferProjectModule } from "./transfer-project/transfer-project.modul
 import { AuthMiddleware } from "./auth/auth.middleware";
 import { ErrorModule } from './error/error.module';
 import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
-import { CampanhaModule } from './campaign/campaign.module';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { CampanhaModule } from './campaign/campaign.module';
     TransferProjectModule,
     ErrorModule,
     RenewCalcProjectModule,
-    CampanhaModule,
+    CampaignModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, AfterLoad} from 'typeorm';
+import { Transform } from 'class-transformer';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
 
 @Entity('tbl_campanha')
 export class CampaignEntity {
@@ -27,12 +29,30 @@ export class CampaignEntity {
   @CreateDateColumn({ name: 'CriadoEm', type: 'datetime' })
   criadoEm: Date;
 
-  @Column({ name: 'CriadoPor', type: 'int' })
-  criadoPor: number;
+  @Transform(({ value }: { value: Usuario }) => ({
+    ID: value.ID,
+    Nome: value.Nome,
+    EmpresaID: value.Empresa,
+  }))
+  @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: false })
+  @JoinColumn({ name: 'CriadoPor' })
+  criadoPor: Usuario;
 
   @UpdateDateColumn({ name: 'ModificadoEm', type: 'datetime', nullable: true })
   modificadoEm: Date;
 
-  @Column({ name: 'ModificadoPor', type: 'int', nullable: true })
-  modificadoPor: number;
+  @Transform(({ value }: { value: Usuario }) => ({
+    ID: Number(value.ID),
+    Nome: value?.Nome,
+  }))
+  @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: true })
+  @JoinColumn({ name: 'ModificadoPor' })
+  modificadoPor: Usuario;
+
+
+  @AfterLoad()
+  convertIDsToNumber() {
+    if (this.criadoPor?.ID) this.criadoPor.ID = Number(this.criadoPor.ID);
+    if (this.modificadoPor?.ID) this.modificadoPor.ID = Number(this.modificadoPor.ID);
+  }
 }

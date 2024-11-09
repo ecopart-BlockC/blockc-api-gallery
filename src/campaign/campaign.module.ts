@@ -9,7 +9,7 @@ import { CampaignController } from './campaign.controller';
   providers: [CampaignService],
   exports: [CampaignService],
 })
-export class CampanhaModule {}
+export class CampaignModule {}
 
 
 
