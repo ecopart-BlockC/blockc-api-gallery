@@ -1,16 +1,15 @@
 import { MiddlewareConsumer, Module } from "@nestjs/common";
-
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AuthMiddleware } from "./auth/auth.middleware";
-import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from "./database/database.module";
-import { ErrorModule } from "./error/error.module";
-import { RenewCalcProjectModule } from "./renew-calc-project/renew-calc-project.module";
+import { ConfigModule } from "@nestjs/config";
+import { UsuarioModule } from "./usuario/usuario.module";
 import { TokenModule } from "./token/token.module";
 import { TransferProjectModule } from "./transfer-project/transfer-project.module";
-import { UsuarioModule } from "./usuario/usuario.module";
-
+import { AuthMiddleware } from "./auth/auth.middleware";
+import { ErrorModule } from './error/error.module';
+import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
+import { CampaignModule } from './campaign/campaign.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -22,12 +21,13 @@ import { UsuarioModule } from "./usuario/usuario.module";
     TransferProjectModule,
     ErrorModule,
     RenewCalcProjectModule,
+    CampaignModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes("*");
+    consumer.apply(AuthMiddleware).forRoutes(AppController);
   }
 }
