@@ -6,6 +6,8 @@ import { Token } from "src/token/entities/token.entity";
 import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
 import { Error } from "src/error/entities/error.entity";
 import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { Neutralization } from "src/neutralization/entities/neutralization.entity";
+import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-pro
         username: configService.get<string>("DB_USER"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_DATABASE"),
-        entities: [Usuario, Token, TransferProject, Error, RenewCalcProject],
+        entities: [Usuario, Token, TransferProject, Error, RenewCalcProject, Neutralization, InvNeutralization],
         synchronize: false,
         extra: {
           options: {

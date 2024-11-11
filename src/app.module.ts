@@ -9,6 +9,8 @@ import { TransferProjectModule } from "./transfer-project/transfer-project.modul
 import { AuthMiddleware } from "./auth/auth.middleware";
 import { ErrorModule } from './error/error.module';
 import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
+import { NeutralizationModule } from './neutralization/neutralization.module';
+import { InvNeutralizationModule } from './inv-neutralization/inv-neutralization.module';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.
     TransferProjectModule,
     ErrorModule,
     RenewCalcProjectModule,
+    NeutralizationModule,
+    InvNeutralizationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
