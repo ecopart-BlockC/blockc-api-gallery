@@ -56,6 +56,9 @@ export class RenewCalcProject {
   @Column({ type: "bigint", nullable: true })
   AlteradoPor: number;
 
+  @Column({ type: "float", nullable: true })
+  Saldo: number;
+
   @Column({ type: "datetime", nullable: true })
   AlteradoEm: Date;
 }

@@ -33,9 +33,4 @@ export class TransferProjectController {
   findOne(@Param("id") id: string) {
     return this.transferProjectService.findOne(+id);
   }
-
-  // @Delete()
-  // deleteAll() {
-  //   return this.transferProjectService.deleteAll();
-  // }
 }
