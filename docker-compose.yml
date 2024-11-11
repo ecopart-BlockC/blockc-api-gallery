@@ -4,7 +4,7 @@ services:
       context: .  # Diretório onde está o Dockerfile
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"  # Mapeia a porta 3001 do contêiner para a porta 3001 do host
+      - "4000:3000"  # Mapeia a porta 3000 do contêiner para a porta 4000 do host
     volumes:
       - .:/srv/app  # Mapeia o diretório atual para o diretório de trabalho no contêiner
       - /srv/app/node_modules  # Garante que node_modules seja isolado no contêiner
