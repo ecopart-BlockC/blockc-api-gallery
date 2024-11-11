@@ -1,11 +1,15 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { Usuario } from "src/usuario/entities/usuario.entity";
+
+import { CampaignEntity } from "src/campaign/entities/campaign.entity";
+import { Error } from "src/error/entities/error.entity";
+import { Module } from "@nestjs/common";
+import { Pais } from "src/pais/entities/pais.entity";
+import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { RouteInventory } from "src/route-inventory/entities/route-inventory.entity";
 import { Token } from "src/token/entities/token.entity";
 import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
-import { Error } from "src/error/entities/error.entity";
-import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Neutralization } from "src/neutralization/entities/neutralization.entity";
 import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 
@@ -24,7 +28,19 @@ import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutraliz
         username: configService.get<string>("DB_USER"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_DATABASE"),
-        entities: [Usuario, Token, TransferProject, Error, RenewCalcProject, Neutralization, InvNeutralization],
+        entities: [
+          Usuario,
+          Token,
+          TransferProject,
+          Error,
+          RenewCalcProject,
+          RouteInventory,
+          Pais,
+          CampaignEntity,
+          ,
+          Neutralization,
+          InvNeutralization,
+        ],
         synchronize: false,
         extra: {
           options: {
