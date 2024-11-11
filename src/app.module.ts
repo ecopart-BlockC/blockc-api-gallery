@@ -10,7 +10,6 @@ import { AuthMiddleware } from "./auth/auth.middleware";
 import { ErrorModule } from './error/error.module';
 import { RenewCalcProjectModule } from './renew-calc-project/renew-calc-project.module';
 import { CampaignModule } from './campaign/campaign.module';
-
 @Module({
   imports: [
     DatabaseModule,
