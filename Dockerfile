@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:latest
 
 WORKDIR /srv/app
 
@@ -6,6 +6,6 @@ COPY . .
 
 RUN yarn install
 
-USER node
+# USER node
 
-CMD [ "yarn", "start" ]	
+CMD [ "yarn", "start" ]
