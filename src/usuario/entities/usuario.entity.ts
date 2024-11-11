@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+import { Exclude } from "class-transformer";
 
 @Entity("tbl_usuario")
 export class Usuario {
@@ -17,6 +19,7 @@ export class Usuario {
   @Column({ type: "varchar", length: 255, nullable: false })
   Email: string;
 
+  @Exclude() // Hide password from responses
   @Column({ type: "varchar", nullable: true })
   Senha: string;
 
@@ -46,4 +49,8 @@ export class Usuario {
 
   @Column({ type: "datetime", nullable: true })
   ModificadoEm: Date | null;
+
+  constructor(partial?: Partial<Usuario>) {
+    Object.assign(this, partial);
+  }
 }
