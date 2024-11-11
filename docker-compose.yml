@@ -1,9 +1,17 @@
+version: '3.8'
+
 services:
   api-gallery:
-    build: .
-    volumes:
-      - .:/srv/app
-    env_file:
-      - .env
+    build:
+      context: .  # Diretório onde está o Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - 3001:3001
+      - "3000:3000"  # Mapeia a porta 3001 do contêiner para a porta 3001 do host
+    volumes:
+      - .:/srv/app  # Mapeia o diretório atual para o diretório de trabalho no contêiner
+      - /srv/app/node_modules  # Garante que node_modules seja isolado no contêiner
+
+    command: ["yarn", "start"]  # Comando para iniciar a aplicação
+
+    # environment:
+    #   - NODE_ENV=development  # Define o ambiente para desenvolvimento
