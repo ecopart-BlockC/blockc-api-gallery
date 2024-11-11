@@ -1,5 +1,6 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
+import { CampaignEntity } from "src/campaign/entities/campaign.entity";
 import { Error } from "src/error/entities/error.entity";
 import { Module } from "@nestjs/common";
 import { Pais } from "src/pais/entities/pais.entity";
@@ -33,6 +34,7 @@ import { Usuario } from "src/usuario/entities/usuario.entity";
           RenewCalcProject,
           RouteInventory,
           Pais,
+          CampaignEntity,
         ],
         synchronize: false,
         extra: {

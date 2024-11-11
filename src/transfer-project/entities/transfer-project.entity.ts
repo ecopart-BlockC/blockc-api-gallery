@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 
 @Entity("tbl_transferencia_projeto_go")
 export class TransferProject {
@@ -17,6 +24,13 @@ export class TransferProject {
   @Column({ type: "datetime" })
   CriadoEm: Date;
 
-  @Column("bigint")
-  CriadoPor: number;
+  @Column("float")
+  Quantidade: number;
+
+  @Column({ type: "float", nullable: true })
+  Saldo: number;
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: false })
+  @JoinColumn({ name: "CriadoPor" })
+  CriadoPor: Usuario;
 }

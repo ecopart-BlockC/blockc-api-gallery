@@ -8,6 +8,7 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthMiddleware } from "./auth/auth.middleware";
+import { CampaignModule } from "./campaign/campaign.module";
 import { ConfigModule } from "@nestjs/config";
 import { DatabaseModule } from "./database/database.module";
 import { ErrorModule } from "./error/error.module";
@@ -29,6 +30,7 @@ import { UsuarioModule } from "./usuario/usuario.module";
     ErrorModule,
     RenewCalcProjectModule,
     RouteInventoryModule,
+    CampaignModule,
   ],
   controllers: [AppController],
   providers: [

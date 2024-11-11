@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, HttpStatus, Res } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Res } from "@nestjs/common";
 import { TokenService } from "./token/token.service";
 import { Response } from "express";
 

@@ -4,6 +4,7 @@ import {
   IsString,
   IsDecimal,
   IsDate,
+  IsNumber,
 } from "class-validator";
 
 export class CreateRenewCalcProjectDto {
@@ -78,4 +79,8 @@ export class CreateRenewCalcProjectDto {
   @IsOptional()
   @IsDate()
   AlteradoEm?: Date;
+
+  @IsOptional()
+  @IsNumber()
+  Saldo?: number;
 }
