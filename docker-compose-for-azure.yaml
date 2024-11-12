@@ -16,5 +16,5 @@ spec:
       - name: api-gallery
         image: api-gallery:latest
         ports:
-        - containerPort: 3000
-        restartPolicy: OnFailure
+          - containerPort: 3000
+        restart: on-failure
