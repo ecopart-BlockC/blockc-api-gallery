@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-gallery
+  template:
+    metadata:
+      labels:
+        app: api-gallery
+    spec:
+      containers:
+      - name: api-gallery
+        image: api-gallery:latest
+        ports:
+        - containerPort: 3000
+        restartPolicy: OnFailure
