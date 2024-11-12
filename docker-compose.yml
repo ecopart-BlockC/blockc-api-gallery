@@ -9,7 +9,6 @@ services:
       - .:/srv/app  # Mapeia o diretório atual para o diretório de trabalho no contêiner
       - /srv/app/node_modules  # Garante que node_modules seja isolado no contêiner
 
-    command: ["yarn", "start"]  # Comando para iniciar a aplicação
+    env_file :
+      .env
 
-    # environment:
-    #   - NODE_ENV=development  # Define o ambiente para desenvolvimento
