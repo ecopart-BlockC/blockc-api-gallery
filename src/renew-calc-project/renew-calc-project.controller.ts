@@ -4,7 +4,6 @@ import {
   Body,
   Patch,
   Param,
-  Put,
   ParseIntPipe,
 } from "@nestjs/common";
 import { RenewCalcProjectService } from "./renew-calc-project.service";
@@ -31,10 +30,10 @@ export class RenewCalcProjectController {
     return this.renewCalcProjectService.findOne(+id);
   }
 
-  @Put()
-  updateAll() {
-    return this.renewCalcProjectService.updateAll();
-  }
+  // @Put()
+  // updateAll() {
+  //   return this.renewCalcProjectService.updateAll();
+  // }
 
   @Patch(":id")
   update(
