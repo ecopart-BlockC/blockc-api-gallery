@@ -19,6 +19,8 @@ import { TransferProjectModule } from "./transfer-project/transfer-project.modul
 import { NeutralizationModule } from "./neutralization/neutralization.module";
 import { InvNeutralizationModule } from "./inv-neutralization/inv-neutralization.module";
 import { UsuarioModule } from "./usuario/usuario.module";
+import { CampaignProjectModule } from "./campaign-project/campaign-project.module";
+import { CampaignCompanyModule } from "./campaign-company/campaign-company.module";
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { UsuarioModule } from "./usuario/usuario.module";
     InvNeutralizationModule,
     RouteInventoryModule,
     CampaignModule,
+    CampaignProjectModule,
+    CampaignCompanyModule,
   ],
   controllers: [AppController],
   providers: [
