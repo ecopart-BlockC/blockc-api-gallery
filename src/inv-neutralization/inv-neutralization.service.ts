@@ -1,14 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateInvNeutralizationDto } from './dto/create-inv-neutralization.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { InvNeutralization } from './entities/inv-neutralization.entity';
-import { DataSource, Repository } from 'typeorm';
-import { ErrorService } from 'src/error/error.service';
-import { UsuarioService } from 'src/usuario/usuario.service';
-import { RenewCalcProjectService } from 'src/renew-calc-project/renew-calc-project.service';
-import { RenewCalcProject } from 'src/renew-calc-project/entities/renew-calc-project.entity';
-// import { UpdateRenewCalcProjectDto } from 'src/renew-calc-project/dto/update-renew-calc-project.dto';
-import { UpdateInvNeutralizationDto } from './dto/update-inv-neutralization.dto';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { CreateInvNeutralizationDto } from "./dto/create-inv-neutralization.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { InvNeutralization } from "./entities/inv-neutralization.entity";
+import { Repository } from "typeorm";
+import { ErrorService } from "src/error/error.service";
+import { RenewCalcProjectService } from "src/renew-calc-project/renew-calc-project.service";
+import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Neutralization } from "src/neutralization/entities/neutralization.entity";
 
 @Injectable()
 export class InvNeutralizationService {
@@ -16,35 +19,38 @@ export class InvNeutralizationService {
     @InjectRepository(InvNeutralization)
     private readonly invNeutralizationRepository: Repository<InvNeutralization>,
     private readonly errorService: ErrorService,
-    private readonly userService: UsuarioService,
-    private readonly renewCalcProjectService: RenewCalcProjectService,
-    private readonly dataSource: DataSource,
+    private readonly renewCalcProjectService: RenewCalcProjectService
   ) {}
-  
-  
-  async create(createInvNeutralizationDto: CreateInvNeutralizationDto) {
-    // const projectGo = await this.renewCalcProjectService.findOne(
-    //   createInvNeutralizationDto.projectGoId
-    // );
 
-    // await this.validateNeutralization(
-    //   projectGo,
-    //   createInvNeutralizationDto.companyId,
-    //   createInvNeutralizationDto.userId,
-    //   createInvNeutralizationDto.amount,
-    // );
+  async create(createInvNeutralizationDto: CreateInvNeutralizationDto) {
+    const user = new Usuario();
+    user.ID = createInvNeutralizationDto.userId;
+
+    const projectGo = await this.renewCalcProjectService.findOne(
+      createInvNeutralizationDto.projectGoId
+    );
+
+    const routeInventoryBalance = 10000; // mocked balance
+
+    this.validateNeutralization(
+      createInvNeutralizationDto.amount,
+      routeInventoryBalance,
+      projectGo
+    );
+
+    const neutralization = new Neutralization();
+
+    neutralization.id = createInvNeutralizationDto.NeutralizacaoId;
 
     try {
       const project = this.invNeutralizationRepository.create({
+        campanhaProjetoId: createInvNeutralizationDto.campanhaProjetoId,
         inventarioId: createInvNeutralizationDto.inventoryId,
         projetoGoId: createInvNeutralizationDto.projectGoId,
-        criadoPor: createInvNeutralizationDto.userId,
-        criadoEm: new Date()
-          .toISOString()
-          .replace("T", " ")
-          .replace("Z", "")
-          .slice(0, -1),
-        quantidadeUsada: createInvNeutralizationDto.userId,
+        criadoPor: user,
+        criadoEm: new Date(),
+        quantidadeUsada: createInvNeutralizationDto.amount,
+        neutralization: neutralization,
       });
 
       return await this.invNeutralizationRepository.save(project);
@@ -61,44 +67,28 @@ export class InvNeutralizationService {
     }
   }
 
-  // async validateNeutralization(
-  //   projectGo: RenewCalcProject,
-  //   companyId: number,
-  //   userId: number,
-  //   amount: number,
-  // ) {
-  //   const inventoryLimit = this.getGOProjectBalance(projectGo.ID);
-  //   if (!projectGo)
-  //     throw new NotFoundException("invalid operation: not found projectGo");
+  deleteAll() {
+    return this.invNeutralizationRepository.clear();
+  }
 
-  //   if (!(await this.userService.findOne(userId)))
-  //     throw new NotFoundException("invalid operation: user not found on database");
-
-  //   if (amount > (await inventoryLimit).Saldo)
-  //     throw new BadRequestException("amount used is greater than the amount available for this project");
-  // }
-
-  
-  // async getGOProjectBalance(projectGoId: number) {
-  //   type ProjectGo = {ID: number, CompanyName: string, Status: string, Saldo: number}
-
-  //   const project: ProjectGo = await this.renewCalcProjectService.findOne(projectGoId);
-    
-  //   if(project.Status === "Auditado")
-  //     throw new BadRequestException("invalid operation: projectGo must be audited before usage");
-  //   return project;
-
-  // }
+  validateNeutralization(
+    amount: number,
+    inventoryBalance: number,
+    projectGo?: RenewCalcProject
+  ) {
+    if (!projectGo)
+      throw new NotFoundException("invalid operation: project not found");
+    if (amount > inventoryBalance)
+      throw new BadRequestException(
+        "invalid operation: amount is greater than inventoryBalance"
+      );
+  }
 
   findAll() {
-    return `This action returns all invNeutralization`;
+    return this.invNeutralizationRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} invNeutralization`;
-  }
-
-  update(id: number, updateInvNeutralizationDto: UpdateInvNeutralizationDto){
-    return `This action returns all invNeutralization`;
+    return this.invNeutralizationRepository.findOne({ where: { id: id } });
   }
 }

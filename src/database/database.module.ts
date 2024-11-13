@@ -12,6 +12,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Neutralization } from "src/neutralization/entities/neutralization.entity";
 import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
+import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
+import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
 
 @Module({
   imports: [
@@ -37,7 +39,8 @@ import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutraliz
           RouteInventory,
           Pais,
           CampaignEntity,
-          ,
+          CampaignCompany,
+          CampaignProject,
           Neutralization,
           InvNeutralization,
         ],

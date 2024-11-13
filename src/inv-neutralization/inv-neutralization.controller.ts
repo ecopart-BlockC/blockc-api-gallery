@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
-import { InvNeutralizationService } from './inv-neutralization.service';
-import { CreateInvNeutralizationDto } from './dto/create-inv-neutralization.dto';
-import { UpdateInvNeutralizationDto } from './dto/update-inv-neutralization.dto';
+import { Controller, Get, Post, Body, Param, Delete } from "@nestjs/common";
+import { InvNeutralizationService } from "./inv-neutralization.service";
+import { CreateInvNeutralizationDto } from "./dto/create-inv-neutralization.dto";
 
-@Controller('inv-neutralization')
+@Controller("inv-neutralization")
 export class InvNeutralizationController {
-  constructor(private readonly invNeutralizationService: InvNeutralizationService) {}
+  constructor(
+    private readonly invNeutralizationService: InvNeutralizationService
+  ) {}
 
   @Post()
   create(@Body() createInvNeutralizationDto: CreateInvNeutralizationDto) {
@@ -17,14 +18,14 @@ export class InvNeutralizationController {
     return this.invNeutralizationService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
     return this.invNeutralizationService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvNeutralizationDto: UpdateInvNeutralizationDto) {
-    return this.invNeutralizationService.update(+id, updateInvNeutralizationDto);
+  @Delete()
+  deleteAll() {
+    return this.invNeutralizationService.deleteAll();
   }
 
   // @Delete(':id')
