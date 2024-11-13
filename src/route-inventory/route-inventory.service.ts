@@ -6,6 +6,7 @@ import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Pais } from "src/pais/entities/pais.entity";
 import { CreateRouteInventoryDto } from "./dtos/route-inventory/create-route-inventory.dto";
 import { UpdateRouteInventoryDto } from "./dtos/route-inventory/update-route-inventory.dto";
+import { CloseInventoryDTO } from "./dtos/route-inventory/close-inventory.dto";
 
 @Injectable()
 export class RouteInventoryService {
@@ -13,6 +14,16 @@ export class RouteInventoryService {
     @InjectRepository(RouteInventory)
     private readonly routeInventoryRepository: Repository<RouteInventory>
   ) {}
+
+  closeInventory(closeInventoryDTO: CloseInventoryDTO) {
+    const user = new Usuario();
+    user.ID = closeInventoryDTO.userId;
+    return this.routeInventoryRepository.update(closeInventoryDTO.inventoryId, {
+      Status: "Fechado",
+      ModificadoEm: new Date(),
+      ModificadoPor: user,
+    });
+  }
 
   // qualquer usuario pode ver todos os inventarios de rotas?
   findAll(param?: { companyId?: number; userId?: number }) {
@@ -31,7 +42,13 @@ export class RouteInventoryService {
   async findOne(ID: number) {
     const inventoryRoute = await this.routeInventoryRepository.findOne({
       where: { ID },
-      relations: ["CriadoPor", "ModificadoPor", "Country"],
+      // relations: ["CriadoPor", "ModificadoPor", "Country"],
+      relations: {
+        CriadoPor: true,
+        ModificadoPor: true,
+        Country: true,
+        neutralizations: true,
+      },
     });
 
     if (!inventoryRoute)
@@ -57,6 +74,10 @@ export class RouteInventoryService {
       CompanyId: createRouteInventoryDto.CompanyId,
       CriadoPor: user,
       ModificadoPor: user,
+      tCO2e: 10000,
+      Saldo: 10000,
+      CriadoEm: new Date(),
+      ModificadoEm: new Date(),
       Country: pais,
       Status: createRouteInventoryDto.Status || "em andamento",
       Ativo: createRouteInventoryDto.Ativo || 1,
@@ -96,5 +117,13 @@ export class RouteInventoryService {
     return {
       message: "Successful deleted route inventory",
     };
+  }
+
+  async deleteAll() {
+    const inventories = await this.routeInventoryRepository.find();
+    inventories.forEach((inventory) => {
+      this.routeInventoryRepository.delete(inventory.ID);
+    });
+    return { message: "ok" };
   }
 }

@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -12,6 +13,7 @@ import {
 import { Pais } from "src/pais/entities/pais.entity";
 import { Transform } from "class-transformer";
 import { Usuario } from "src/usuario/entities/usuario.entity";
+import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity({ name: "tbl_inventario_rota" })
@@ -43,6 +45,9 @@ export class RouteInventory {
   @Column({ type: "float", name: "tCO2e", nullable: true })
   tCO2e: number;
 
+  @Column({ type: "float", name: "Saldo", nullable: true })
+  Saldo: number;
+
   @Transform(({ value }: { value: Pais }) => value.Nome)
   @ManyToOne(() => Pais, (pais) => pais.ID, { nullable: false })
   @JoinColumn({ name: "CountryID" })
@@ -61,6 +66,15 @@ export class RouteInventory {
 
   @UpdateDateColumn({ type: "datetime", name: "ModificadoEm", nullable: true })
   ModificadoEm: Date;
+
+  @OneToMany(
+    () => InvNeutralization,
+    (invNeutralization) => invNeutralization.routeInventory,
+    {
+      nullable: true,
+    }
+  )
+  neutralizations: InvNeutralization[];
 
   constructor(partial?: Partial<RouteInventory>) {
     Object.assign(this, partial);
