@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, Param } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  Put,
+  ParseIntPipe,
+} from "@nestjs/common";
 import { RenewCalcProjectService } from "./renew-calc-project.service";
 import { UpdateRenewCalcProjectDto } from "./dto/update-renew-calc-project.dto";
 
@@ -13,9 +21,19 @@ export class RenewCalcProjectController {
     return this.renewCalcProjectService.findAll();
   }
 
+  @Get("activities/:id")
+  findAllActivies(@Param("id", ParseIntPipe) id: number) {
+    return this.renewCalcProjectService.findAllActivies(id);
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.renewCalcProjectService.findOne(+id);
+  }
+
+  @Put()
+  updateAll() {
+    return this.renewCalcProjectService.updateAll();
   }
 
   @Patch(":id")

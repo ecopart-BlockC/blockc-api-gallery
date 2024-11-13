@@ -6,6 +6,7 @@ import {
   IsDate,
   IsNumber,
 } from "class-validator";
+import { Usuario } from "src/usuario/entities/usuario.entity";
 
 export class CreateRenewCalcProjectDto {
   @IsOptional()
@@ -53,8 +54,7 @@ export class CreateRenewCalcProjectDto {
   EvidenceFiles?: string;
 
   @IsOptional()
-  @IsInt()
-  CriadoPor?: number;
+  CriadoPor?: Usuario;
 
   @IsOptional()
   @IsDate()

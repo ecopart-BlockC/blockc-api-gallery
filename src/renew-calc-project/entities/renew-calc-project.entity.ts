@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
+import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
+import { Usuario } from "src/usuario/entities/usuario.entity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 
 @Entity("tbl_renovacalc_valores")
 export class RenewCalcProject {
@@ -38,9 +48,6 @@ export class RenewCalcProject {
   @Column({ type: "varchar", length: 2000, nullable: true })
   EvidenceFiles: string;
 
-  @Column({ type: "bigint", nullable: true })
-  CriadoPor: number;
-
   @Column({ type: "datetime", nullable: true })
   CriadoEm: Date;
 
@@ -61,4 +68,19 @@ export class RenewCalcProject {
 
   @Column({ type: "datetime", nullable: true })
   AlteradoEm: Date;
+
+  @OneToMany(() => TransferProject, (transfer) => transfer.projeto, {
+    nullable: false,
+  })
+  transacoes: TransferProject[];
+
+  @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: false })
+  @JoinColumn({ name: "CriadoPor" })
+  CriadoPor: Usuario;
+
+  @OneToMany(
+    () => CampaignProject,
+    (campaignProject) => campaignProject.projeto
+  )
+  campaignProjects: CampaignProject[];
 }
