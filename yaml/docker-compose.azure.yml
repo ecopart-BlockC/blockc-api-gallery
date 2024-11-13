@@ -1,0 +1,11 @@
+services:
+  api-gallery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:3000"
+    deploy:
+      restart_policy:
+        condition: on-failure
+
