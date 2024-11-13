@@ -1,0 +1,15 @@
+services:
+  api-gallery:
+    build:
+      context: .  # Diretório onde está o Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "4000:3000"  # Mapeia a porta 3000 do contêiner para a porta 4000 do host
+    volumes:
+      - .:/srv/app  # Mapeia o diretório atual para o diretório de trabalho no contêiner
+      - /srv/app/node_modules  # Garante que node_modules seja isolado no contêiner
+
+    command: ["yarn", "start"]  # Comando para iniciar a aplicação
+
+    # environment:
+    #   - NODE_ENV=development  # Define o ambiente para desenvolvimento
