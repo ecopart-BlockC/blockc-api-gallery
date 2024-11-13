@@ -5,7 +5,7 @@ export class CreateRouteInventoryDto {
   @IsNotEmpty()
   Nome: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   CompanyId: number;
 
@@ -20,6 +20,10 @@ export class CreateRouteInventoryDto {
   @IsNumber()
   @IsOptional()
   TCO2e?: number;
+
+  @IsNumber()
+  @IsOptional()
+  Saldo?: number;
 
   @IsString()
   @IsOptional()

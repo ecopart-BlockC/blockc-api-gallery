@@ -16,7 +16,11 @@ import { RenewCalcProjectModule } from "./renew-calc-project/renew-calc-project.
 import { RouteInventoryModule } from "./route-inventory/route-inventory.module";
 import { TokenModule } from "./token/token.module";
 import { TransferProjectModule } from "./transfer-project/transfer-project.module";
+import { NeutralizationModule } from "./neutralization/neutralization.module";
+import { InvNeutralizationModule } from "./inv-neutralization/inv-neutralization.module";
 import { UsuarioModule } from "./usuario/usuario.module";
+import { CampaignProjectModule } from "./campaign-project/campaign-project.module";
+import { CampaignCompanyModule } from "./campaign-company/campaign-company.module";
 
 @Module({
   imports: [
@@ -29,8 +33,12 @@ import { UsuarioModule } from "./usuario/usuario.module";
     TransferProjectModule,
     ErrorModule,
     RenewCalcProjectModule,
+    NeutralizationModule,
+    InvNeutralizationModule,
     RouteInventoryModule,
     CampaignModule,
+    CampaignProjectModule,
+    CampaignCompanyModule,
   ],
   controllers: [AppController],
   providers: [

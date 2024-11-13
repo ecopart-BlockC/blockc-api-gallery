@@ -11,6 +11,7 @@ import { TransferProjectModule } from "src/transfer-project/transfer-project.mod
   imports: [
     TypeOrmModule.forFeature([RenewCalcProject]),
     forwardRef(() => TransferProjectModule), // Usando forwardRef aqui também
+    TransferProjectModule,
   ],
   exports: [RenewCalcProjectService],
 })

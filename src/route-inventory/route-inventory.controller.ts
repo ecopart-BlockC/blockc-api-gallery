@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -11,6 +10,7 @@ import {
 import { RouteInventoryService } from "./route-inventory.service";
 import { CreateRouteInventoryDto } from "./dtos/route-inventory/create-route-inventory.dto";
 import { UpdateRouteInventoryDto } from "./dtos/route-inventory/update-route-inventory.dto";
+import { CloseInventoryDTO } from "./dtos/route-inventory/close-inventory.dto";
 
 @Controller("route-inventory")
 export class RouteInventoryController {
@@ -19,6 +19,11 @@ export class RouteInventoryController {
   @Post("inventory")
   createRouteInventory(@Body() body: CreateRouteInventoryDto) {
     return this.routeInventoryService.create(body);
+  }
+
+  @Post("close-inventory")
+  closeInventory(@Param("id") id: number, @Body() body: CloseInventoryDTO) {
+    return this.routeInventoryService.closeInventory(body);
   }
 
   @Patch("inventory/:id")
@@ -41,8 +46,8 @@ export class RouteInventoryController {
     return this.routeInventoryService.findAll(query);
   }
 
-  @Delete("inventory/:id")
-  deleteRouteInventory(@Param("id") id: number) {
-    return this.routeInventoryService.delete(id);
-  }
+  // @Delete()
+  // deleteAll() {
+  //   return this.routeInventoryService.deleteAll();
+  // }
 }

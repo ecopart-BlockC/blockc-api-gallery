@@ -125,6 +125,8 @@ export class TransferProjectService {
         projectGoId: Number(transference.ProjetoGoID),
         quantity: Number(transference.Quantidade),
         balance: Number(transference.Saldo),
+        type: "GOGAS_TRANSF",
+        unit: "m3",
         createdBy: {
           name: transference.CriadoPor.Nome,
           lastName: transference.CriadoPor.Sobrenome,
@@ -134,21 +136,61 @@ export class TransferProjectService {
     });
   }
 
-  async deleteAll() {
-    const transferProjects = await this.transferProjectRepository.find();
-
-    return transferProjects.forEach(async (project) => {
-      await this.transferProjectRepository.delete({
-        ID: project.ID,
-      });
+  async findProjectsReceived(companyId: number) {
+    return await this.transferProjectRepository.find({
+      where: {
+        EmpresaRecebedoraID: companyId,
+      },
+      relations: {
+        projeto: true,
+      },
     });
   }
 
-  findOne(id: number) {
-    return this.transferProjectRepository.findOne({
+  async findProjectsSended(companyId: number) {
+    return await this.transferProjectRepository.find({
+      where: {
+        EmpresaEnviadoraID: companyId,
+      },
+      relations: {
+        projeto: true,
+      },
+    });
+  }
+
+  async deleteAll() {
+    return this.transferProjectRepository.clear();
+  }
+
+  async findOne(id: number) {
+    const transferProject = await this.transferProjectRepository.findOne({
       where: {
         ID: id,
       },
+      relations: {
+        projeto: true,
+      },
+    });
+
+    return {
+      ...transferProject,
+      projeto: {
+        ...transferProject.projeto,
+        AuditFiles: JSON.parse(transferProject.projeto.AuditFiles),
+      },
+    };
+  }
+
+  async findByProjectId(id: number) {
+    const project = await this.transferProjectRepository.findBy({
+      ProjetoGoID: id,
+    });
+    return project;
+  }
+
+  updateBalance(id: number, newBalance: number) {
+    return this.transferProjectRepository.update(id, {
+      Saldo: newBalance,
     });
   }
 }

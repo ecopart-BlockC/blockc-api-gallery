@@ -10,6 +10,10 @@ import { Token } from "src/token/entities/token.entity";
 import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Neutralization } from "src/neutralization/entities/neutralization.entity";
+import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
+import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
+import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
 
 @Module({
   imports: [
@@ -35,6 +39,10 @@ import { Usuario } from "src/usuario/entities/usuario.entity";
           RouteInventory,
           Pais,
           CampaignEntity,
+          CampaignCompany,
+          CampaignProject,
+          Neutralization,
+          InvNeutralization,
         ],
         synchronize: false,
         extra: {
