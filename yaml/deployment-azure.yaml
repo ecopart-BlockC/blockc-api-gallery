@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: blockc-dev
+  name: blockc-secret
+type: Opaque
+data:
+  DB_PASSWORD: MHB3blpyUHJtQ05RSjB6MGJ1
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: blockc-dev
+  name: api-gallery
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gallery
+  template:
+    metadata:
+      labels:
+        app: api-gallery
+    spec:
+      containers:
+        - name: api-gallery
+          image: blockccontainerregistry.azurecr.io/api-gallery:0.0.3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: DB_HOST
+              value: "10.0.200.200"
+            - name: DB_PORT
+              value: "1433"
+            - name: DB_DATABASE
+              value: "BlockC_v2"
+            - name: DB_USER
+              value: "blockc_UGNfe"
+            - name: DB_APP_NAME
+              value: "BlockC v2 - WebApi"
+            - name: DB_PROVIDER
+              value: "System.Data.SqlClient"
+            - name: DB_SYNCHRONIZE
+              value: "false"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: blockc-secret
+                  key: DB_PASSWORD
+      imagePullSecrets:
+        - name: blockcreg
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: blockc-dev
+  name: api-gallery-service
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 3000
+  selector:
+    app: api-gallery
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gallery-ing
+  namespace: blockc-dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.org/websocket-services: web-service
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    nginx.org/server-snippets: |
+      gzip on;
+      gzip_proxied any;
+      gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript;
+spec:
+  tls:
+    - hosts:
+        - blockc-k8s-dev1.dyndns.kluh.com.br
+      secretName: api-gallery-k8.az1-cert
+  rules:
+    - host: blockc-k8s-dev1.dyndns.kluh.com.br
+      http:
+        paths:
+          - backend:
+              service:
+                name: api-gallery-service
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+
+# kubectl apply -f C:\Users\ailto\resources\code\nest\blockc-api-gallery\yaml\deployment-azure.yaml
+# para criar ou atualizar todas as configurações do yaml
+
+
+
