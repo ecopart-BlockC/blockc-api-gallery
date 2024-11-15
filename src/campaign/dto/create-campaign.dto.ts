@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsInt } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateCampaignDto {
   @IsString()
@@ -30,4 +30,8 @@ export class CreateCampaignDto {
 
   @IsOptional()
   companyIds: number[];
+
+  @IsInt()
+  @IsNotEmpty()
+  createdCompanyId: number;
 }

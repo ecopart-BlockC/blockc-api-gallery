@@ -1,19 +1,7 @@
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
-import { CampaignEntity } from "src/campaign/entities/campaign.entity";
-import { Error } from "src/error/entities/error.entity";
 import { Module } from "@nestjs/common";
-import { Pais } from "src/pais/entities/pais.entity";
-import { RenewCalcProject } from "src/renew-calc-project/entities/renew-calc-project.entity";
-import { RouteInventory } from "src/route-inventory/entities/route-inventory.entity";
-import { Token } from "src/token/entities/token.entity";
-import { TransferProject } from "src/transfer-project/entities/transfer-project.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Neutralization } from "src/neutralization/entities/neutralization.entity";
-import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
-import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
-import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
 
 @Module({
   imports: [
@@ -30,20 +18,7 @@ import { CampaignProject } from "src/campaign-project/entities/campaign-project.
         username: configService.get<string>("DB_USER"),
         password: configService.get<string>("DB_PASSWORD"),
         database: configService.get<string>("DB_DATABASE"),
-        entities: [
-          Usuario,
-          Token,
-          TransferProject,
-          Error,
-          RenewCalcProject,
-          RouteInventory,
-          Pais,
-          CampaignEntity,
-          CampaignCompany,
-          CampaignProject,
-          Neutralization,
-          InvNeutralization,
-        ],
+        entities: ["dist/**/*.entity.js"],
         synchronize: false,
         extra: {
           options: {

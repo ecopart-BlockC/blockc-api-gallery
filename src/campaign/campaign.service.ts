@@ -11,6 +11,7 @@ import { CampaignProject } from "src/campaign-project/entities/campaign-project.
 import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
 import { RenewCalcProjectService } from "src/renew-calc-project/renew-calc-project.service";
 import { TransferProjectService } from "src/transfer-project/transfer-project.service";
+import { Company } from "src/company/entities/company.entity";
 @Injectable()
 export class CampaignService {
   constructor(
@@ -22,8 +23,13 @@ export class CampaignService {
     private readonly campaignCompany: CampaignCompanyService
   ) {}
 
-  async findCampaignWithCompany(): Promise<CampaignEntity[]> {
+  async findCampaignWithCompany(params?: {
+    companyId?: number;
+  }): Promise<CampaignEntity[]> {
     return await this.campaignRepository.find({
+      where: {
+        company: { ID: params.companyId },
+      },
       select: {
         id: true,
         nome: true,
@@ -47,6 +53,7 @@ export class CampaignService {
       relations: {
         criadoPor: true,
         modificadoPor: true,
+        company: true,
       },
     });
   }
@@ -70,6 +77,10 @@ export class CampaignService {
       );
 
       user.ID = createCampaignDto.userId;
+
+      const createCompany = new Company({
+        ID: createCampaignDto.createdCompanyId,
+      });
 
       const campaignId = v4();
 
@@ -116,6 +127,7 @@ export class CampaignService {
         id: campaignId,
         projects: projects,
         companies: companies,
+        company: createCompany,
       });
 
       const createdCampaign = await this.campaignRepository.save(campaign);

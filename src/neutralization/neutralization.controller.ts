@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+} from "@nestjs/common";
 import { NeutralizationService } from "./neutralization.service";
 import { CreateNeutralizationDto } from "./dto/create-neutralization.dto";
 import { UpdateNeutralizationDto } from "./dto/update-neutralization.dto";
@@ -19,8 +27,8 @@ export class NeutralizationController {
   }
 
   @Get()
-  findAll() {
-    return this.neutralizationService.findAll();
+  findAll(@Query() params: { companyId?: number }) {
+    return this.neutralizationService.findAll(params);
   }
 
   @Get(":id")

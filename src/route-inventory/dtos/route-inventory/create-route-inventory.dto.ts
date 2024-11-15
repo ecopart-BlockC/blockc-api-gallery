@@ -19,7 +19,7 @@ export class CreateRouteInventoryDto {
 
   @IsNumber()
   @IsOptional()
-  TCO2e?: number;
+  tCO2e?: number;
 
   @IsNumber()
   @IsOptional()

@@ -1,15 +1,19 @@
 import { IsInt, IsNotEmpty, IsPositive, IsString } from "class-validator";
 
 export class CreateNeutralizationDto {
-    @IsNotEmpty()
-    @IsString()
-    name: string;
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsString()
-    description: string;
+  @IsString()
+  description: string;
 
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty()
-    userId: number;
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty()
+  userId: number;
+
+  @IsInt()
+  @IsNotEmpty()
+  companyId: number;
 }

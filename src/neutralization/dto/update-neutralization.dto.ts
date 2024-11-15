@@ -1,17 +1,6 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateNeutralizationDto } from './create-neutralization.dto';
-import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import { CreateNeutralizationDto } from "./create-neutralization.dto";
+import { PartialType } from "@nestjs/mapped-types";
 
-export class UpdateNeutralizationDto extends PartialType(CreateNeutralizationDto) {
-    @IsNotEmpty()
-    @IsString()
-    name: string;
-
-    @IsString()
-    description: string;
-
-    @IsInt()
-    @IsPositive()
-    @IsNotEmpty()
-    userId: number;
-}
+export class UpdateNeutralizationDto extends PartialType(
+  CreateNeutralizationDto
+) {}

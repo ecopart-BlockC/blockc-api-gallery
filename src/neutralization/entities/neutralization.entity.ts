@@ -1,13 +1,15 @@
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+
+import { Company } from "src/company/entities/company.entity";
 import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 import { Usuario } from "src/usuario/entities/usuario.entity";
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  OneToMany,
-} from "typeorm";
 
 @Entity("tbl_neutralizacao")
 export class Neutralization {
@@ -36,6 +38,10 @@ export class Neutralization {
   @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: false })
   @JoinColumn({ name: "CriadoPor" })
   criadoPor: Usuario;
+
+  @ManyToOne(() => Company, (company) => company.ID, { nullable: true })
+  @JoinColumn({ name: "CompanyId" })
+  company: Company;
 
   @OneToMany(
     () => InvNeutralization,

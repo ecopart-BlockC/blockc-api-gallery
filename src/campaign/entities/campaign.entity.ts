@@ -1,18 +1,20 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
+  AfterLoad,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
-  AfterLoad,
+  ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
+
+import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
+import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
+import { Company } from "src/company/entities/company.entity";
 import { Transform } from "class-transformer";
 import { Usuario } from "src/usuario/entities/usuario.entity";
-import { CampaignProject } from "src/campaign-project/entities/campaign-project.entity";
-import { CampaignCompany } from "src/campaign-company/entities/campaign-company.entity";
 
 @Entity("tbl_campanha")
 export class CampaignEntity {
@@ -59,6 +61,10 @@ export class CampaignEntity {
   @ManyToOne(() => Usuario, (usuario) => usuario.ID, { nullable: true })
   @JoinColumn({ name: "ModificadoPor" })
   modificadoPor: Usuario;
+
+  @ManyToOne(() => Company, (company) => company.ID, { nullable: false })
+  @JoinColumn({ name: "CompanyId" })
+  company: Company;
 
   @AfterLoad()
   convertIDsToNumber() {
