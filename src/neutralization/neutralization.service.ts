@@ -17,6 +17,7 @@ import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutraliz
 import { InvNeutralizationService } from "src/inv-neutralization/inv-neutralization.service";
 import { RouteInventoryService } from "src/route-inventory/route-inventory.service";
 import { CampaignProjectService } from "src/campaign-project/campaign-project.service";
+import { Company } from "src/company/entities/company.entity";
 
 @Injectable()
 export class NeutralizationService {
@@ -33,6 +34,10 @@ export class NeutralizationService {
   async create(createNeutralizationDto: CreateNeutralizationDto) {
     const user = new Usuario();
     user.ID = createNeutralizationDto.userId;
+
+    const company = new Company();
+    company.ID = createNeutralizationDto.companyId;
+
     try {
       const neutralization = this.neutralizationRepository.create({
         criadoPor: user,
@@ -49,6 +54,7 @@ export class NeutralizationService {
           .slice(0, -1),
         descricao: createNeutralizationDto.description,
         nome: createNeutralizationDto.name,
+        company: company,
       });
       return await this.neutralizationRepository.save(neutralization);
     } catch (error) {
@@ -64,10 +70,16 @@ export class NeutralizationService {
     }
   }
 
-  async findAll() {
+  async findAll(params?: { companyId?: number }) {
     return this.neutralizationRepository.find({
+      where: {
+        company: {
+          ID: params.companyId,
+        },
+      },
       relations: {
         criadoPor: true,
+        company: true,
       },
       select: {
         criadoPor: {
