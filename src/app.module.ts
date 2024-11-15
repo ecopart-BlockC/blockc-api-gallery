@@ -24,6 +24,8 @@ import { UsuarioModule } from "./usuario/usuario.module";
 
 const APP_PROTECTED_ROUTES = "*";
 
+const isDevMode = process.env.NODE_ENV === "development";
+
 @Module({
   imports: [
     DatabaseModule,
@@ -50,6 +52,7 @@ const APP_PROTECTED_ROUTES = "*";
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(APP_PROTECTED_ROUTES);
+    if (!isDevMode)
+      consumer.apply(AuthMiddleware).forRoutes(APP_PROTECTED_ROUTES);
   }
 }
