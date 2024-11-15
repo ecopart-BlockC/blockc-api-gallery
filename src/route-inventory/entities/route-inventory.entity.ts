@@ -10,10 +10,11 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Company } from "src/company/entities/company.entity";
+import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 import { Pais } from "src/pais/entities/pais.entity";
 import { Transform } from "class-transformer";
 import { Usuario } from "src/usuario/entities/usuario.entity";
-import { InvNeutralization } from "src/inv-neutralization/entities/inv-neutralization.entity";
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Entity({ name: "tbl_inventario_rota" })
@@ -24,9 +25,9 @@ export class RouteInventory {
   @Column({ type: "varchar", name: "Nome", length: 255, nullable: false })
   Nome: string;
 
-  //@Transform(({ value }) => value.Nome) // Nao funciona pois precisa mapear o objeto (causa ausencia do dado no response)
-  @Column({ type: "bigint", name: "CompanyId", nullable: false })
-  CompanyId: number;
+  @ManyToOne(() => Company, (company) => company.ID, { nullable: false })
+  @JoinColumn({ name: "CompanyId" })
+  Company: Company;
 
   @Column({ type: "varchar", length: 50, name: "Status", nullable: false })
   Status: string;
